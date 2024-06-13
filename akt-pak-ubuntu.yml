@@ -1,7 +1,10 @@
 ---
 - name: Update packages on Ubuntu servers
-  hosts: server  # Ersetzen Sie 'ubuntu_servers' durch Ihre tatsächliche Gruppe oder Host(s)
+  hosts: all  # Ersetzen Sie 'all' durch Ihre tatsächliche Gruppe oder Host(s)
   become: yes  # Erforderlich, um sudo-Berechtigungen für das Aktualisieren der Pakete zu erhalten
+
+  environment:  # Definieren der Umgebungsvariablen für alle Aufgaben unter diesem Playbook
+    LANG: "de_DE.utf8"
 
   tasks:
     - name: Update apt package cache
