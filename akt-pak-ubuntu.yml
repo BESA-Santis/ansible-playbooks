@@ -17,6 +17,9 @@
         dpkg_options: 'force-confdef,force-confold'
       register: apt_upgrade_result
 
+    - debug:
+        var: apt_upgrade_result.changed
+
     - name: Reboot if packages were upgraded
       ansible.builtin.reboot:
         reboot_timeout: 600
@@ -29,3 +32,4 @@
       become: yes
       become_method: sudo
       when: apt_upgrade_result.changed
+
