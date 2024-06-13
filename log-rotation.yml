@@ -1,0 +1,27 @@
+---
+- name: Configure log rotation for web servers
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Ensure logrotate is installed
+      apt:
+        name: logrotate
+        state: present
+
+    - name: Configure log rotation for web server logs
+      copy:
+        dest: /etc/logrotate.d/webserver
+        content: |
+          /var/log/nginx/*.log {
+            daily
+            missingok
+            rotate 14
+            compress
+            delaycompress
+            notifempty
+            create 0640 www-data adm
+            sharedscripts
+            postrotate
+              [ -s /run/nginx.pid ] && kill -USR1 `cat /run/nginx.pid`
+            endscript
+          }
