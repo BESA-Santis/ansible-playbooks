@@ -18,6 +18,11 @@
         autoclean: yes   # Löscht alte Paketdateien aus dem Cache
       register: apt_upgrade_result  # Registrieren des Ergebnisses der Paketaktualisierung
 
+      - name: Update all Debian/Ubuntu packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+
     - name: Reboot if packages were upgraded
       ansible.builtin.reboot:
         reboot_timeout: 600  # Timeout für den Neustart in Sekunden (optional)
