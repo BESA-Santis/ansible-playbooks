@@ -1,25 +1,23 @@
 ---
-- name: Update spam and virus definitions
+- name: Spam- und Virendefinitionen aktualisieren
   hosts: all
   become: yes
   tasks:
-    - name: Update spamassassin rules
+    - name: Spamassassin-Regeln aktualisieren
       command: sa-update
       notify:
-        - restart spamassassin
-
-    - name: Update clamav definitions
+        - spamassassin neu starten
+    - name: ClamAV-Definitionen aktualisieren
       command: freshclam
       notify:
-        - restart clamav
+        - clamav neu starten
 
   handlers:
-    - name: restart spamassassin
+    - name: spamassassin neu starten
       service:
         name: spamassassin
         state: restarted
-
-    - name: restart clamav
+    - name: clamav neu starten
       service:
         name: clamav-daemon
         state: restarted
