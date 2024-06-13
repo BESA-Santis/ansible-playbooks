@@ -1,0 +1,22 @@
+---
+- name: Update packages on Ubuntu servers
+  hosts: all  # Ersetzen Sie 'ubuntu_servers' durch Ihre tatsächliche Gruppe oder Host(s)
+  become: yes  # Erforderlich, um sudo-Berechtigungen für das Aktualisieren der Pakete zu erhalten
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: yes
+        autoremove: yes  # Entfernt automatisch nicht mehr benötigte Pakete
+        autoclean: yes   # Löscht alte Paketdateien aus dem Cache
+
+    - name: Reboot if required
+      ansible.builtin.reboot:
+        reboot_timeout: 600  # Timeout für den Neustart in Sekunden (optional)
+        connect_timeout: 30  # Timeout für den Neustartversuch in Sekunden (optional)
+        reboot_timeout_is_seconds: true  # Verwenden Sie Sekunden für den Timeout (optional)
+      when: ansible_reboot_pending  # Führt den Neustart nur aus, wenn ein Neustart erforderlich ist
