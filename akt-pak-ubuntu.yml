@@ -3,7 +3,13 @@
   hosts: all
   become: yes
   become_method: sudo
-  
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+      become: yes
+
     - name: Upgrade all packages to the latest version
       apt:
         upgrade: dist
@@ -12,6 +18,7 @@
         force_apt_get: yes
         dpkg_options: 'force-confdef,force-confold'
       register: apt_upgrade_result
+      become: yes
 
     - debug:
         var: apt_upgrade_result.changed
@@ -22,3 +29,4 @@
         connect_timeout: 30
         reboot_timeout_is_seconds: true
       when: apt_upgrade_result.changed
+      become: yes
