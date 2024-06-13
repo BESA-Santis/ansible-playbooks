@@ -1,30 +1,27 @@
 ---
-- name: Backup important files
+- name: Wichtige Dateien sichern
   hosts: all
   become: yes
   vars:
     backup_dest: /backup/
   tasks:
-    - name: Create backup directory
+    - name: Sicherungsverzeichnis erstellen
       file:
         path: "{{ backup_dest }}"
         state: directory
         mode: '0755'
-
-    - name: Backup website files
+    - name: Webseiten-Dateien sichern
       synchronize:
         src: /var/www/html/
         dest: "{{ backup_dest }}/website/"
         archive: yes
-
-    - name: Backup MySQL databases
+    - name: MySQL-Datenbanken sichern
       mysql_db:
         name: "{{ item }}"
         state: dump
         target: "{{ backup_dest }}/db_backup/{{ item }}.sql"
       loop: "{{ lookup('mysql_db', 'name', wantlist=True) }}"
-
-    - name: Backup email data
+    - name: E-Mail-Daten sichern
       synchronize:
         src: /var/mail/
         dest: "{{ backup_dest }}/mail/"
