@@ -1,15 +1,12 @@
----
-- name: Update all packages on Ubuntu servers
+- name: Alle Pakete auf Ubuntu-Servern aktualisieren
   hosts: all
   become: yes
   tasks:
-    - name: Update the apt cache
+    - name: APT-Cache aktualisieren
       apt:
         update_cache: yes
-
-    - name: Upgrade all packages
+    - name: Alle Pakete upgraden
       apt:
         upgrade: dist
         autoremove: yes
         autoclean: yes
-
