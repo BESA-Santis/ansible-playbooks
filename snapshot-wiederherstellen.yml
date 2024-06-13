@@ -1,0 +1,27 @@
+- name: Dateien von rsnapshot wiederherstellen
+  hosts: all
+  become: yes
+  vars:
+    snapshot_path: /var/cache/rsnapshot/daily.0/
+    restore_path: /restore/path/
+  tasks:
+    - name: Sicherstellen, dass das Wiederherstellungsverzeichnis existiert
+      file:
+        path: "{{ restore_path }}"
+        state: directory
+        mode: '0755'
+    - name: Webseiten-Dateien wiederherstellen
+      synchronize:
+        src: "{{ snapshot_path }}/localhost/var/www/"
+        dest: "{{ restore_path }}/var/www/"
+        archive: yes
+    - name: Datenbankdateien wiederherstellen
+      synchronize:
+        src: "{{ snapshot_path }}/localhost/var/backups/db/"
+        dest: "{{ restore_path }}/var/backups/db/"
+        archive: yes
+    - name: E-Mail-Daten wiederherstellen
+      synchronize:
+        src: "{{ snapshot_path }}/localhost/var/mail/"
+        dest: "{{ restore_path }}/var/mail/"
+        archive: yes
