@@ -1,0 +1,31 @@
+---
+- name: Backup important files
+  hosts: all
+  become: yes
+  vars:
+    backup_dest: /backup/
+  tasks:
+    - name: Create backup directory
+      file:
+        path: "{{ backup_dest }}"
+        state: directory
+        mode: '0755'
+
+    - name: Backup website files
+      synchronize:
+        src: /var/www/html/
+        dest: "{{ backup_dest }}/website/"
+        archive: yes
+
+    - name: Backup MySQL databases
+      mysql_db:
+        name: "{{ item }}"
+        state: dump
+        target: "{{ backup_dest }}/db_backup/{{ item }}.sql"
+      loop: "{{ lookup('mysql_db', 'name', wantlist=True) }}"
+
+    - name: Backup email data
+      synchronize:
+        src: /var/mail/
+        dest: "{{ backup_dest }}/mail/"
+        archive: yes
