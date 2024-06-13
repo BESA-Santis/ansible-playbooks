@@ -3,12 +3,7 @@
   hosts: all
   become: yes
   become_method: sudo
-
-  tasks:
-    - name: Update apt package cache
-      apt:
-        update_cache: yes
-
+  
     - name: Upgrade all packages to the latest version
       apt:
         upgrade: dist
