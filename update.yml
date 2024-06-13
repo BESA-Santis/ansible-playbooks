@@ -1,3 +1,4 @@
+---
 - name: Alle Pakete auf Ubuntu-Servern aktualisieren
   hosts: all
   become: yes
