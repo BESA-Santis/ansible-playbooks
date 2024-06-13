@@ -1,6 +1,6 @@
 ---
-- name: Update and upgrade specific packages on Ubuntu servers
-  hosts: all
+- name: Update and upgrade all packages including foreign packages on Ubuntu servers
+  hosts: deine_host_gruppe
   become: yes
   become_method: sudo
 
@@ -8,16 +8,6 @@
     - name: Update apt package cache
       apt:
         update_cache: yes
-
-    - name: Upgrade python3-update-manager package
-      apt:
-        name: python3-update-manager
-        state: latest
-
-    - name: Upgrade update-manager-core package
-      apt:
-        name: update-manager-core
-        state: latest
 
     - name: Upgrade all packages to the latest version
       apt:
@@ -30,6 +20,16 @@
 
     - debug:
         var: apt_upgrade_result.changed
+
+    - name: Upgrade Fremdpakete
+      apt:
+        upgrade: yes
+        autoremove: yes
+        autoclean: yes
+        force_apt_get: yes
+        dpkg_options: 'force-confdef,force-confold'
+        allow_unauthenticated: yes
+        only_upgrade: yes
 
     - name: Reboot if packages were upgraded
       ansible.builtin.reboot:
