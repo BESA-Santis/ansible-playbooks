@@ -1,5 +1,5 @@
 ---
-- name: Update and upgrade packages on Ubuntu servers
+- name: Update and upgrade specific packages on Ubuntu servers
   hosts: all
   become: yes
   become_method: sudo
@@ -9,9 +9,19 @@
       apt:
         update_cache: yes
 
+    - name: Upgrade python3-update-manager package
+      apt:
+        name: python3-update-manager
+        state: latest
+
+    - name: Upgrade update-manager-core package
+      apt:
+        name: update-manager-core
+        state: latest
+
     - name: Upgrade all packages to the latest version
       apt:
-        upgrade: dist
+        upgrade: yes
         autoremove: yes
         autoclean: yes
         force_apt_get: yes
