@@ -1,0 +1,24 @@
+---
+- name: Rsnapshot für inkrementelle Backups konfigurieren und nutzen
+  hosts: all
+  become: yes
+  tasks:
+    - name: Sicherstellen, dass rsnapshot installiert ist
+      apt:
+        name: rsnapshot
+        state: present
+    - name: Rsnapshot konfigurieren
+      copy:
+        dest: /etc/rsnapshot.conf
+        content: |
+          config_version 1.2
+          snapshot_root /var/cache/rsnapshot/
+          no_create_root 1
+          interval daily 7
+          interval weekly 4
+          interval monthly 3
+          backup /home/ localhost/
+          backup /etc/ localhost/
+          backup /var/www/ localhost/
+    - name: Rsnapshot tägliches Backup ausführen
+      command: rsnapshot daily
