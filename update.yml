@@ -8,6 +8,6 @@
         update_cache: yes
     - name: Alle Pakete upgraden
       apt:
-        upgrade: dist
+        upgrade: yes
         autoremove: yes
         autoclean: yes
