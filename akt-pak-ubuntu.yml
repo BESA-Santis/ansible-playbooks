@@ -3,9 +3,6 @@
   hosts: all  # Ersetzen Sie 'all' durch Ihre tatsächliche Gruppe oder Host(s)
   become: yes  # Erforderlich, um sudo-Berechtigungen für das Aktualisieren der Pakete zu erhalten
 
-  environment:  # Definieren der Umgebungsvariablen für alle Aufgaben unter diesem Playbook
-    LANG: "de_DE.utf8"
-
   tasks:
     - name: Update apt package cache
       apt:
@@ -16,12 +13,9 @@
         upgrade: yes
         autoremove: yes  # Entfernt automatisch nicht mehr benötigte Pakete
         autoclean: yes   # Löscht alte Paketdateien aus dem Cache
+        force_apt_get: yes  # Erzwingt die Verwendung von apt-get statt apt
+        dpkg_options: 'force-confdef,force-confold'  # Vermeidet die interaktive Konfiguration von dpkg
       register: apt_upgrade_result  # Registrieren des Ergebnisses der Paketaktualisierung
-
-    - name: Update all Debian/Ubuntu packages to their latest version
-      ansible.builtin.apt:
-        name: "*"
-        state: latest
 
     - name: Reboot if packages were upgraded
       ansible.builtin.reboot:
