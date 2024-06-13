@@ -1,0 +1,26 @@
+---
+- name: Manage fail2ban configuration
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure fail2ban is installed
+      apt:
+        name: fail2ban
+        state: present
+
+    - name: Configure fail2ban
+      copy:
+        dest: /etc/fail2ban/jail.local
+        content: |
+          [DEFAULT]
+          bantime  = 3600
+          findtime  = 600
+          maxretry = 3
+
+          [sshd]
+          enabled = true
+
+    - name: Restart fail2ban
+      service:
+        name: fail2ban
+        state: restarted
