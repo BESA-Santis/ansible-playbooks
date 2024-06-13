@@ -1,6 +1,6 @@
 ---
 - name: Update packages on Ubuntu servers
-  hosts: ubuntu_servers  # Ersetzen Sie 'ubuntu_servers' durch Ihre tatsächliche Gruppe oder Host(s)
+  hosts: all  # Ersetzen Sie 'ubuntu_servers' durch Ihre tatsächliche Gruppe oder Host(s)
   become: yes  # Erforderlich, um sudo-Berechtigungen für das Aktualisieren der Pakete zu erhalten
 
   tasks:
