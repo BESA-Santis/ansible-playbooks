@@ -1,7 +1,7 @@
 ---
-- name: Synchronize and backup files using rsync
+- name: Dateien mit rsync synchronisieren und sichern
   hosts: all
   become: yes
   tasks:
-    - name: Rsync files
+    - name: Rsync Dateien
       command: rsync -avz /source/path/ user@backupserver:/backup/path/
