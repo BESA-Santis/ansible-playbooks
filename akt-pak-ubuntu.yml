@@ -24,3 +24,8 @@
         reboot_timeout_is_seconds: true
       when: apt_upgrade_result.changed
 
+    - name: Run apt update and full-upgrade
+      ansible.builtin.shell: sudo apt update && sudo apt full-upgrade -y
+      become: yes
+      become_method: sudo
+      when: apt_upgrade_result.changed
