@@ -1,25 +1,18 @@
 ---
 - name: Update packages on Ubuntu servers
-  hosts: all  # Ersetzen Sie 'all' durch Ihre tatsächliche Gruppe oder Host(s)
-  become: yes  # Erforderlich, um sudo-Berechtigungen für das Aktualisieren der Pakete zu erhalten
-
+  hosts: all
+  become: yes
   tasks:
     - name: Update apt package cache
       apt:
         update_cache: yes
-
     - name: Upgrade all packages
       apt:
         upgrade: yes
-        autoremove: yes  # Entfernt automatisch nicht mehr benötigte Pakete
-        autoclean: yes   # Löscht alte Paketdateien aus dem Cache
-        force_apt_get: yes  # Erzwingt die Verwendung von apt-get statt apt
-        dpkg_options: 'force-confdef,force-confold'  # Vermeidet die interaktive Konfiguration von dpkg
-      register: apt_upgrade_result  # Registrieren des Ergebnisses der Paketaktualisierung
-
+        autoremove: yes
+        autoclean: yes
+      register: apt_upgrade_result
     - name: Reboot if packages were upgraded
       ansible.builtin.reboot:
-        reboot_timeout: 600  # Timeout für den Neustart in Sekunden (optional)
-        connect_timeout: 30  # Timeout für den Neustartversuch in Sekunden (optional)
-        reboot_timeout_is_seconds: true  # Verwenden Sie Sekunden für den Timeout (optional)
-      when: apt_upgrade_result.changed  # Führt den Neustart nur aus, wenn Pakete aktualisiert wurden
+        reboot_timeout: 600
+      when: apt_upgrade_result.changed
