@@ -1,6 +1,6 @@
 ---
 - name: Update and upgrade all packages including foreign packages on Ubuntu servers
-  hosts: deine_host_gruppe
+  hosts: all
   become: yes
   become_method: sudo
 
