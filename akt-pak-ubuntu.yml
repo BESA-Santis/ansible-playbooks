@@ -19,7 +19,9 @@
           - "--force-confdef"
           - "--force-confold"
       register: apt_upgrade_result
-      failed_when: apt_upgrade_result.rc != 0 and "'dpkg: error' in apt_upgrade_result.stdout"
+      failed_when: 
+        - apt_upgrade_result.rc != 0 
+        - "'dpkg: error' in apt_upgrade_result.stdout"
       ignore_errors: yes
 
     - name: Debug apt upgrade result
@@ -66,6 +68,7 @@
         reboot_timeout: 600
         connect_timeout: 30
       when: dpkg_fix_attempt.changed or apt_upgrade_result.changed
+
 
 
 
