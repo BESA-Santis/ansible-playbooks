@@ -16,22 +16,22 @@
         autoclean: yes
         force_apt_get: yes
         dpkg_options:
-          - "force-confdef"
-          - "force-confold"
+          - "--force-confdef"
+          - "--force-confold"
       register: apt_upgrade_result
 
     - debug:
         var: apt_upgrade_result.changed
 
-    - name: Upgrade Fremdpakete
+    - name: Upgrade foreign packages
       apt:
         upgrade: yes
         autoremove: yes
         autoclean: yes
         force_apt_get: yes
         dpkg_options:
-          - "force-confdef"
-          - "force-confold"
+          - "--force-confdef"
+          - "--force-confold"
         allow_unauthenticated: yes
         only_upgrade: yes
 
@@ -39,5 +39,4 @@
       ansible.builtin.reboot:
         reboot_timeout: 600
         connect_timeout: 30
-        reboot_timeout_is_seconds: true
       when: apt_upgrade_result.changed
