@@ -9,8 +9,7 @@
       shell:
         cmd: |
           sudo rm -f /var/lib/apt/lists/lock
-          # sudo rm -f /var/cache/apt/archives/lock
-          # sudo rm -f /var/lib/dpkg/lock*
+          
       ignore_errors: yes
 
     - name: Update apt package cache
