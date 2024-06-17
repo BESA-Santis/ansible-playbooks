@@ -1,6 +1,9 @@
-- name: Update and upgrade all packages on Ubuntu servers
+---
+- name: Update and upgrade all packages including foreign packages on Ubuntu servers
   hosts: all
   become: yes
+  become_method: sudo
+
   tasks:
     - name: Update apt package cache
       apt:
@@ -8,20 +11,60 @@
 
     - name: Upgrade all packages to the latest version
       apt:
-        upgrade: yes
+        upgrade: full
+        autoremove: yes
+        autoclean: yes
+        force_apt_get: yes
+        dpkg_options: 
+          - "--force-confdef"
+          - "--force-confold"
+      register: apt_upgrade_result
+      failed_when: 
+        - apt_upgrade_result.rc != 0 
+        - "'dpkg: error' in apt_upgrade_result.stdout"
+      ignore_errors: yes
+
+    - name: Debug apt upgrade result
+      debug:
+        var: apt_upgrade_result
+
+    - name: Check if dpkg is locked
+      shell: |
+        lsof /var/lib/dpkg/lock
+      register: dpkg_lock_check
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Debug dpkg lock check
+      debug:
+        var: dpkg_lock_check
+
+    - name: Attempt to fix broken packages
+      shell: |
+        sudo dpkg --configure -a
+      when: "'dpkg: error' in apt_upgrade_result.stdout"
+      register: dpkg_fix_attempt
+      ignore_errors: yes
+
+    - name: Debug dpkg fix attempt
+      debug:
+        var: dpkg_fix_attempt
+
+    - name: Upgrade foreign packages
+      apt:
+        upgrade: full
         autoremove: yes
         autoclean: yes
         force_apt_get: yes
         allow_unauthenticated: yes
+        only_upgrade: yes
         dpkg_options:
           - "--force-confdef"
           - "--force-confold"
-      register: apt_upgrade_result
-      failed_when: apt_upgrade_result.failed
-      changed_when: apt_upgrade_result.changed
+      when: dpkg_fix_attempt.changed or apt_upgrade_result.changed
 
     - name: Reboot if packages were upgraded
       ansible.builtin.reboot:
         reboot_timeout: 600
         connect_timeout: 30
-      when: apt_upgrade_result.changed
+      when: dpkg_fix_attempt.changed or apt_upgrade_result.changed
