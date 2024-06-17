@@ -11,7 +11,7 @@
 
     - name: Upgrade all packages to the latest version
       apt:
-        upgrade: dist
+        upgrade: yes
         autoremove: yes
         autoclean: yes
         force_apt_get: yes
