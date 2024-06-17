@@ -4,6 +4,14 @@
   become: yes
 
   tasks:
+    - name: Clear apt locks if they exist
+      shell:
+        cmd: |
+          rm -f /var/lib/apt/lists/lock
+          rm -f /var/cache/apt/archives/lock
+          rm -f /var/lib/dpkg/lock*
+      ignore_errors: yes
+
     - name: Update apt package cache
       apt:
         update_cache: yes
@@ -25,3 +33,4 @@
         reboot_timeout: 600
         connect_timeout: 30
       when: apt_upgrade_result.changed
+
