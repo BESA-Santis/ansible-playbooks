@@ -15,9 +15,7 @@
         autoremove: yes
         autoclean: yes
         force_apt_get: yes
-        dpkg_options:
-          - "--force-confdef"
-          - "--force-confold"
+        dpkg_options: '--force-confdef --force-confold'
       register: apt_upgrade_result
 
     - debug:
@@ -25,13 +23,11 @@
 
     - name: Upgrade foreign packages
       apt:
-        upgrade: yes
+        upgrade: dist
         autoremove: yes
         autoclean: yes
         force_apt_get: yes
-        dpkg_options:
-          - "--force-confdef"
-          - "--force-confold"
+        dpkg_options: '--force-confdef --force-confold'
         allow_unauthenticated: yes
         only_upgrade: yes
 
@@ -40,3 +36,4 @@
         reboot_timeout: 600
         connect_timeout: 30
       when: apt_upgrade_result.changed
+
