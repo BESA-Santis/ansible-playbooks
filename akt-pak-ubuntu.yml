@@ -15,7 +15,7 @@
         autoclean: yes
         force_apt_get: yes
         allow_unauthenticated: yes
-        dpkg_options: "--force-confdef --force-confold"
+        dpkg_options: "force-confdef force-confold"
       register: apt_upgrade_result
       failed_when: apt_upgrade_result.failed
       changed_when: apt_upgrade_result.changed
