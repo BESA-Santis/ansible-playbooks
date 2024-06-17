@@ -8,9 +8,9 @@
       become: yes
       shell:
         cmd: |
-          rm -f /var/lib/apt/lists/lock
-          rm -f /var/cache/apt/archives/lock
-          rm -f /var/lib/dpkg/lock*
+          sudo rm -f /var/lib/apt/lists/lock
+          sudo rm -f /var/cache/apt/archives/lock
+          sudo rm -f /var/lib/dpkg/lock*
       ignore_errors: yes
 
     - name: Update apt package cache
@@ -34,4 +34,3 @@
         reboot_timeout: 600
         connect_timeout: 30
       when: apt_upgrade_result.changed
-
