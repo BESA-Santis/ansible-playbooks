@@ -5,6 +5,7 @@
 
   tasks:
     - name: Clear apt locks if they exist
+      become: yes
       shell:
         cmd: |
           rm -f /var/lib/apt/lists/lock
