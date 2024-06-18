@@ -2,9 +2,15 @@
 - hosts: all
   become: yes
   tasks:
-    - name: Add sudoers configuration
+    - name: Gather facts about users
+      setup:
+        gather_subset:
+          - all
+
+    - name: Add sudoers configuration for detected users
       lineinfile:
         dest: /etc/sudoers
-        line: 'ansible_user ALL=(ALL) NOPASSWD: ALL'
+        line: '{{ item }} ALL=(ALL) NOPASSWD: ALL'
         validate: 'visudo -cf %s'
       become_method: sudo
+      loop: '{{ ansible_users.keys() | list }}'
