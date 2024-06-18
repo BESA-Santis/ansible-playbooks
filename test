@@ -1,6 +1,6 @@
 ---
 - name: Configure Ansible defaults
-  hosts: localhost  # Führen Sie dies auf dem lokalen System aus
+  hosts: all
 
   tasks:
     - name: Create ansible.cfg file
