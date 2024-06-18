@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Add sudoers configuration
+      lineinfile:
+        dest: /etc/sudoers
+        line: 'ansible_user ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+      become_method: sudo
