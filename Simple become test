@@ -1,0 +1,14 @@
+---
+- name: Simple become test
+  hosts: all
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Check whoami with become
+      command: whoami
+      register: whoami_output
+
+    - name: Debug whoami output
+      debug:
+        var: whoami_output
