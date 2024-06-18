@@ -1,7 +1,11 @@
 ---
-- hosts: all
+- hosts: server
   become: yes
   tasks:
+    - name: Debug ansible_ssh_pass
+      debug:
+        var: ansible_ssh_pass
+
     - name: Check whoami with become
       command: whoami
       register: whoami_output
@@ -9,4 +13,3 @@
     - name: Debug whoami output
       debug:
         var: whoami_output
-
