@@ -29,3 +29,4 @@
     - name: Display ansible.cfg content
       debug:
         msg: "{{ ansible_cfg_content.stdout }}"
+
