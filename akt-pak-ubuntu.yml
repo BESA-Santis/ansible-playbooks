@@ -1,12 +1,12 @@
 ---
 - name: Update and upgrade Ubuntu packages
   hosts: all
-  become: yes
+  become: true
   become_user: root
 
   tasks:
     - name: Clear apt locks if they exist
-      become: yes
+      become: true
       become_user: root
       shell: |
         rm -f /var/lib/apt/lists/lock
@@ -15,13 +15,13 @@
       ignore_errors: yes
 
     - name: Update apt package cache
-      become: yes
+      become: true
       become_user: root
       apt:
         update_cache: yes
 
     - name: Upgrade all packages to the latest version
-      become: yes
+      become: true
       become_user: root
       apt:
         upgrade: yes
