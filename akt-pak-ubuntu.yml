@@ -5,6 +5,14 @@
   become_user: root
 
   tasks:
+    - name: Clear apt locks if they exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /var/lib/apt/lists/lock
+      ignore_errors: yes
+
     - name: Update apt package cache
       apt:
         update_cache: yes
