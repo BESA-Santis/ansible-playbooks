@@ -1,0 +1,19 @@
+- name: test
+  hosts: localhost
+  gather_facts: no  # Deaktiviert die Faktensammlung für den lokalen Host
+
+  tasks:
+    - name: use ansible to find path to ansible.cfg
+      shell: "ansible --version | awk -F '= ' '/config file/{print $2}'"
+      register: version_dump
+      failed_when:
+        - version_dump.stdout_lines | length != 1  # Fehler, wenn die Ausgabe nicht genau eine Zeile hat
+        - version_dump.stderr_lines | length != 0  # Fehler, wenn es Fehlermeldungen gibt
+
+    - name: set a fact we can use
+      set_fact:
+        ansible_cfg: "{{ version_dump.stdout }}"  # Setzt den gefundenen Pfad als Fakt
+
+    - name: show the value
+      debug:
+        var: ansible_cfg  # Gibt den gesetzten Fakt aus
