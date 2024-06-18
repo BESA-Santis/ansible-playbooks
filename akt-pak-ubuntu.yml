@@ -1,26 +1,26 @@
 ---
 - name: Update and upgrade Ubuntu packages
   hosts: all
-  become: true
+  become: yes
   become_user: root
 
   tasks:
     - name: Clear apt locks if they exist
-      become: true
-      become_user: root
-      shell: |
-        rm -f /var/lib/apt/lists/lock
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /var/lib/apt/lists/lock
+        - /var/cache/apt/archives/lock
+        - /var/lib/dpkg/lock
+        - /var/lib/dpkg/lock-frontend
       ignore_errors: yes
 
     - name: Update apt package cache
-      become: true
-      become_user: root
       apt:
         update_cache: yes
 
     - name: Upgrade all packages to the latest version
-      become: true
-      become_user: root
       apt:
         upgrade: yes
         autoremove: yes
@@ -36,3 +36,4 @@
         reboot_timeout: 600
         connect_timeout: 30
       when: apt_upgrade_result.changed
+
