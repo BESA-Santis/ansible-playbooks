@@ -3,14 +3,14 @@
   hosts: all
   become: yes
 
-  tasks:
-    - name: Clear apt locks if they exist
-      become: yes
-      shell: |
-        rm -f /var/lib/apt/lists/lock
-        rm -f /var/cache/apt/archives/lock
-        rm -f /var/lib/dpkg/lock*
-      ignore_errors: yes
+  #tasks:
+  #  - name: Clear apt locks if they exist
+   #   become: yes
+    #  shell: |
+     #   rm -f /var/lib/apt/lists/lock
+      #  rm -f /var/cache/apt/archives/lock
+     #   rm -f /var/lib/dpkg/lock*
+    #  ignore_errors: yes
 
     - name: Update apt package cache
       apt:
