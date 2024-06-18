@@ -5,13 +5,35 @@
   become_user: root
 
   tasks:
+    - name: Check whoami
+      command: whoami
+      register: whoami_output
+
+    - name: Debug whoami output
+      debug:
+        var: whoami_output
+
+    - name: Check sudo permissions
+      command: sudo -l
+      register: sudo_permissions
+
+    - name: Debug sudo permissions
+      debug:
+        var: sudo_permissions
+
     - name: Clear apt locks if they exist
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - /var/lib/apt/lists/lock
+      shell: |
+        rm -f /var/lib/apt/lists/lock
       ignore_errors: yes
+
+    - name: Debug apt lock removal
+      shell: ls -l /var/lib/apt/lists/lock /var/cache/apt/archives/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend
+      ignore_errors: yes
+      register: lock_files
+
+    - name: Show lock files
+      debug:
+        var: lock_files
 
     - name: Update apt package cache
       apt:
@@ -33,4 +55,3 @@
         reboot_timeout: 600
         connect_timeout: 30
       when: apt_upgrade_result.changed
-
