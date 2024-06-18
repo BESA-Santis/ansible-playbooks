@@ -1,0 +1,21 @@
+- name: test
+  hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: use ansible to find path to ansible.cfg
+      shell: "ansible --version | awk -F '= ' '/config file/{print $2}'"
+      register: version_dump
+      failed_when:
+        - version_dump.stdout_lines | length != 1
+        - version_dump.stderr_lines | length != 0
+
+    - name: set a fact we can use
+      set_fact:
+        ansible_cfg: "{{ version_dump.stdout }}"
+
+
+    - name: show the value
+      debug:
+        var: ansible_cfg
+
