@@ -1,17 +1,12 @@
 ---
-- hosts: all
+- hosts: server
   become: yes
-  become_method: sudo
-  become_pass: Semaphore
-  tasks:
-    - name: simple-become-test
   tasks:
     - name: Check whoami with become
-      become: yes
-      become_user: root
       command: whoami
       register: whoami_output
 
     - name: Debug whoami output
       debug:
         var: whoami_output
+
