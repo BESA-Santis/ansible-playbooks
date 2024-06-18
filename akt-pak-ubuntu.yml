@@ -10,8 +10,6 @@
       become_user: root
       shell: |
         rm -f /var/lib/apt/lists/lock
-        rm -f /var/cache/apt/archives/lock
-        rm -f /var/lib/dpkg/lock*
       ignore_errors: yes
 
     - name: Update apt package cache
