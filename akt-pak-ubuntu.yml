@@ -27,9 +27,6 @@
         state: absent
       loop:
         - /var/lib/apt/lists/lock
-        - /var/cache/apt/archives/lock
-        - /var/lib/dpkg/lock
-        - /var/lib/dpkg/lock-frontend
       ignore_errors: yes
 
     - name: Debug apt lock removal
