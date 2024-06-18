@@ -1,7 +1,10 @@
 ---
-- name: Simple become test
-  hosts: all
-
+- hosts: all
+  become: yes
+  become_method: sudo
+  become_pass: Semaphore
+  tasks:
+    - name: simple-become-test
   tasks:
     - name: Check whoami with become
       become: yes
