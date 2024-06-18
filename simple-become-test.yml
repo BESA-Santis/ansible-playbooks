@@ -1,5 +1,5 @@
 ---
-- hosts: server
+- hosts: all
   become: yes
   tasks:
     - name: Check whoami with become
