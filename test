@@ -4,15 +4,15 @@
 
   tasks:
     - name: Create ansible.cfg file
+      become: yes
       copy:
         content: |
           [defaults]
           become = True
           become_method = sudo
           become_user = root
-        dest: /etc/ansible/ansible.cfg  # Zielort der ansible.cfg Datei
-      become: yes  # Erlaubt, als root zu handeln
-      become_user: root  # Setzt den Benutzer, der root-Rechte haben soll
+        dest: /etc/ansible/ansible.cfg
+        force: yes  # Erstellt das Verzeichnis, falls nicht vorhanden
 
     - name: Show ansible.cfg content
       command: cat /etc/ansible/ansible.cfg
@@ -21,4 +21,5 @@
     - name: Display ansible.cfg content
       debug:
         msg: "{{ ansible_cfg_content.stdout }}"
+
 
