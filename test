@@ -1,16 +1,15 @@
 ---
 - name: Configure Ansible defaults
   hosts: all
+  become: yes  # Setzt 'become: yes' für das gesamte Playbook
 
   tasks:
     - name: Ensure directory exists for ansible.cfg
-      become: yes
       file:
         path: /etc/ansible
         state: directory
 
     - name: Create ansible.cfg file
-      become: yes
       copy:
         content: |
           [defaults]
@@ -26,3 +25,4 @@
     - name: Display ansible.cfg content
       debug:
         msg: "{{ ansible_cfg_content.stdout }}"
+
