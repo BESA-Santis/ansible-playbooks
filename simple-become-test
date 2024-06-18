@@ -1,9 +1,4 @@
 ---
-[defaults]
-become = True
-become_method = sudo
-become_user = root
-
 - name: Simple become test
   hosts: all
 
