@@ -1,23 +1,23 @@
 ---
-
-- name: test
+- name: Test playbook to find ansible.cfg path
   hosts: all
   become: yes
   gather_facts: no
+
   tasks:
-    - name: use ansible to find path to ansible.cfg
-      shell: "ansible --version | awk -F '= ' '/config file/{print $2}'"
-      register: version_dump
+    - name: Use ansible-config to find path to ansible.cfg
+      command: ansible-config --list | grep CONFIG_FILE | awk -F '= ' '{print $2}'
+      register: ansible_config_output
       failed_when:
-        - version_dump.stdout_lines | length != 1
-        - version_dump.stderr_lines | length != 0
+        - ansible_config_output.rc != 0  # Fehler, wenn der Befehl nicht erfolgreich ist
+        - ansible_config_output.stdout_lines | length != 1  # Genau eine Zeile erwartet
 
-    - name: set a fact we can use
+    - name: Set fact with ansible.cfg path
       set_fact:
-        ansible_cfg: "{{ version_dump.stdout }}"
+        ansible_cfg: "{{ ansible_config_output.stdout }}"
 
-
-    - name: show the value
+    - name: Show ansible_cfg value
       debug:
         var: ansible_cfg
+
 
