@@ -1,13 +1,16 @@
 ---
 - name: Configure Ansible defaults
   hosts: all
-  become: yes  # Setzt 'become: yes' für das gesamte Playbook
+  become: yes  # Um als Root zu handeln
 
   tasks:
-    - name: Ensure directory exists for ansible.cfg
+    - name: Ensure /etc/ansible directory exists
       file:
         path: /etc/ansible
         state: directory
+        owner: root
+        group: root
+        mode: '0755'
 
     - name: Create ansible.cfg file
       copy:
@@ -17,6 +20,7 @@
           become_method = sudo
           become_user = root
         dest: /etc/ansible/ansible.cfg
+      become: yes  # Um als Root zu handeln
 
     - name: Show ansible.cfg content
       command: cat /etc/ansible/ansible.cfg
@@ -25,4 +29,3 @@
     - name: Display ansible.cfg content
       debug:
         msg: "{{ ansible_cfg_content.stdout }}"
-
