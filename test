@@ -1,19 +1,24 @@
-- name: test
-  hosts: localhost
-  gather_facts: no  # Deaktiviert die Faktensammlung für den lokalen Host
+---
+- name: Configure Ansible defaults
+  hosts: localhost  # Führen Sie dies auf dem lokalen System aus
 
   tasks:
-    - name: use ansible to find path to ansible.cfg
-      shell: "ansible --version | awk -F '= ' '/config file/{print $2}'"
-      register: version_dump
-      failed_when:
-        - version_dump.stdout_lines | length != 1  # Fehler, wenn die Ausgabe nicht genau eine Zeile hat
-        - version_dump.stderr_lines | length != 0  # Fehler, wenn es Fehlermeldungen gibt
+    - name: Create ansible.cfg file
+      copy:
+        content: |
+          [defaults]
+          become = True
+          become_method = sudo
+          become_user = root
+        dest: /etc/ansible/ansible.cfg  # Zielort der ansible.cfg Datei
+      become: yes  # Erlaubt, als root zu handeln
+      become_user: root  # Setzt den Benutzer, der root-Rechte haben soll
 
-    - name: set a fact we can use
-      set_fact:
-        ansible_cfg: "{{ version_dump.stdout }}"  # Setzt den gefundenen Pfad als Fakt
+    - name: Show ansible.cfg content
+      command: cat /etc/ansible/ansible.cfg
+      register: ansible_cfg_content
 
-    - name: show the value
+    - name: Display ansible.cfg content
       debug:
-        var: ansible_cfg  # Gibt den gesetzten Fakt aus
+        msg: "{{ ansible_cfg_content.stdout }}"
+
