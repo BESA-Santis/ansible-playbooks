@@ -13,6 +13,12 @@
 
 - hosts: remote_servers  # Die Gruppe "remote_servers" umfasst den Server 192.168.209.94
   tasks:
+    - name: Ensure target2 directory exists
+      ansible.builtin.file:
+        path: "/home/target2"
+        state: directory
+
     - name: Concatenate output from test servers
       ansible.builtin.shell: "cat /tmp/hostname_output.txt >> /home/target2/test_server_output.txt"
       delegate_to: remote_server
+      ignore_errors: true
