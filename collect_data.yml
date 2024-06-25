@@ -1,0 +1,31 @@
+---
+- name: Sammeln von Daten von Servern
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Uptime sammeln
+      command: uptime
+      register: uptime_output
+
+    - name: Logs sammeln (letzte 10 Zeilen von /var/log/syslog)
+      command: tail -n 10 /var/log/syslog
+      register: log_output
+
+    - name: Daten in Datei schreiben
+      delegate_to: localhost
+      copy:
+        content: |
+          Host: {{ inventory_hostname }}
+          Uptime: {{ uptime_output.stdout }}
+          Logs:
+          {{ log_output.stdout }}
+        dest: /home/target1/.local/test/output_{{ inventory_hostname }}.txt
+
+    - name: HTML-Seite erstellen
+      delegate_to: localhost
+      template:
+        src: template.html.j2  # Stelle sicher, dass der Pfad zur Template-Datei korrekt ist
+        dest: /home/target1/.local/test/output_{{ inventory_hostname }}.html
+      vars:
+        uptime: "{{ uptime_output.stdout }}"
+        logs: "{{ log_output.stdout }}"
