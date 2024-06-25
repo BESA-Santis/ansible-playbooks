@@ -1,7 +1,7 @@
 - hosts: localhost
   tasks:
     - name: Get system information
-      ansible.builtin.shell: "hostnamectl"
+      ansible.builtin.shell: "uname -a"
       register: hostname_output
 
     - name: Send output via email
@@ -9,11 +9,10 @@
         host: smtp.hispeed.ch
         port: 587
         username: s.berger@hispeed.ch
-        password: "{{ Sascha-2004 }}"
+        password: "{{ Sascha.2004 }}"
         to: sascha.berger@santismail.ch
         subject: Ansible Output
         body: "{{ hostname_output.stdout }}"
-        from: s.berger@hispeed.ch  # Setze hier die Absenderadresse
+        from: s.berger@hispeed.ch
         secure: starttls
-
-
+        
