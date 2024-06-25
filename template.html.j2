@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Daten - {{ inventory_hostname }}</title>
+</head>
+<body>
+    <h1>Daten für {{ inventory_hostname }}</h1>
+    <h2>Uptime</h2>
+    <p>{{ uptime }}</p>
+    <h2>Logs</h2>
+    <pre>{{ logs }}</pre>
+</body>
+</html>
