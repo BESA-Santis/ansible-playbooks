@@ -1,30 +1,12 @@
----
-- name: Sammeln von Daten von Servern und Speichern in HTML-Dateien
-  hosts: all
-  gather_facts: no
-  become: yes
-  become_method: su
+# Beispiel playbook.yml
+- hosts: test
   tasks:
-    - name: Uptime sammeln
-      command: uptime
-      register: uptime_output
+    - name: Get system information
+      ansible.builtin.shell: "hostnamectl"
+      register: hostname_output
 
-    - name: Logs sammeln (letzte 10 Zeilen von /var/log/syslog)
-      command: tail -n 10 /var/log/syslog
-      register: log_output
+    - name: Write output to file
+      ansible.builtin.copy:
+        content: "{{ hostname_output.stdout }}"
+        dest: /home/target1/ausgabedatei.txt
 
-    - name: HTML-Verzeichnis erstellen, falls nicht vorhanden
-      delegate_to: localhost
-      file:
-        path: /home/target1/testtt
-        state: directory
-        mode: '0755'
-
-    - name: HTML-Seite erstellen
-      delegate_to: localhost
-      template:
-        src: template.html.j2
-        dest: /home/html_data/output_{{ inventory_hostname }}.html
-      vars:
-        uptime: "{{ uptime_output.stdout }}"
-        logs: "{{ log_output.stdout }}"
