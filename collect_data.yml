@@ -22,6 +22,7 @@
       ansible.builtin.copy:
         src: "/tmp/hostname_output_{{ item }}.txt"
         dest: "/home/target2/hostname_output_{{ item }}.txt"
+        remote_src: true  # Dies sagt Ansible, dass die Quelldatei auf dem Remote-Server existiert
       with_items: "{{ groups['test'] }}"
       delegate_to: remote_server
       ignore_errors: true
