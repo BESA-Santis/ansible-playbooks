@@ -1,4 +1,5 @@
-- hosts: test  # Die Gruppe "test" umfasst die beiden Server 192.168.209.89 und 192.168.209.95
+---
+- hosts: test
   tasks:
     - name: Get system information from test servers
       ansible.builtin.shell: "hostnamectl"
@@ -11,18 +12,20 @@
         dest: "/tmp/hostname_output_{{ inventory_hostname }}.txt"
       delegate_to: "{{ inventory_hostname }}"
 
-- hosts: remote_servers  # Die Gruppe "remote_servers" umfasst den Server 192.168.209.94
+- hosts: remote_servers
   tasks:
-    - name: Ensure target2 directory exists
+    - name: Ensure /tmp directory exists on remote server
       ansible.builtin.file:
-        path: "/home/target2"
+        path: "/tmp"
         state: directory
+      delegate_to: remote_server
 
     - name: Transfer output from each test server to individual files
       ansible.builtin.copy:
         src: "/tmp/hostname_output_{{ item }}.txt"
         dest: "/home/target2/hostname_output_{{ item }}.txt"
-        remote_src: true  # Dies sagt Ansible, dass die Quelldatei auf dem Remote-Server existiert
+        remote_src: true
+        force: yes  # Erzwingt die Übertragung auch dann, wenn die Datei bereits existiert
       with_items: "{{ groups['test'] }}"
       delegate_to: remote_server
       ignore_errors: true
