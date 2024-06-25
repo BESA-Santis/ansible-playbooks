@@ -1,5 +1,6 @@
-# Beispiel playbook.yml
-- hosts: test
+# playbook.yml
+
+- hosts: test  # Hier sollten die richtigen Hosts angegeben werden, auf denen du die Aufgaben ausführen möchtest
   tasks:
     - name: Get system information
       ansible.builtin.shell: "hostnamectl"
@@ -8,5 +9,4 @@
     - name: Write output to file
       ansible.builtin.copy:
         content: "{{ hostname_output.stdout }}"
-        dest: /home/target1/ausgabedatei.txt
-
+        dest: "/home/target1/ausgabedatei.txt"
