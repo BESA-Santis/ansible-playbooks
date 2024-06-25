@@ -9,7 +9,7 @@
         host: imap.hispeed.ch
         port: 587
         username: s.berger@hispeed.ch
-        password: Sascha-2004
+        password: 
         to: sascha.berger@santismail.ch
         subject: Ansible Output
         body: "{{ hostname_output.stdout }}"
