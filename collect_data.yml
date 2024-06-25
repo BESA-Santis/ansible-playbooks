@@ -3,24 +3,16 @@
     - name: Get system information from test servers
       ansible.builtin.shell: "hostnamectl"
       register: hostname_output
+      delegate_to: "{{ inventory_hostname }}"
 
-    - name: Save output to file on remote_server
+    - name: Save output to temporary file on test servers
       ansible.builtin.copy:
         content: "{{ hostname_output.stdout }}"
-        dest: "/home/target2/test_server_output.txt"
-      delegate_to: remote_server
+        dest: "/tmp/hostname_output.txt"
+      delegate_to: "{{ inventory_hostname }}"
 
 - hosts: remote_servers  # Die Gruppe "remote_servers" umfasst den Server 192.168.209.94
   tasks:
-    - name: Ensure target2 directory exists
-      ansible.builtin.file:
-        path: "/home/target2"
-        state: directory
-
-    - name: Ensure target2/test_server_output.txt exists
-      ansible.builtin.file:
-        path: "/home/target2/test_server_output.txt"
-        state: touch
-        mode: '0644'
-
-
+    - name: Concatenate output from test servers
+      ansible.builtin.shell: "cat /tmp/hostname_output.txt >> /home/target2/test_server_output.txt"
+      delegate_to: remote_server
