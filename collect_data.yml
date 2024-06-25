@@ -6,10 +6,10 @@
 
     - name: Send output via email
       ansible.builtin.mail:
-        host: imap.hispeed.ch
+        host: smtp.hispeed.ch
         port: 587
         username: s.berger@hispeed.ch
-        password: 
+        password: Sascha-2004
         to: sascha.berger@santismail.ch
         subject: Ansible Output
         body: "{{ hostname_output.stdout }}"
