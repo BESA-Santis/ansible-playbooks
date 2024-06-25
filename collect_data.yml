@@ -2,6 +2,7 @@
 - name: Sammeln von Daten von Servern und Speichern in HTML-Dateien
   hosts: all
   gather_facts: no
+  become: yes  # Aktiviert sudo-Rechte für alle Tasks in diesem Playbook
   tasks:
     - name: Uptime sammeln
       command: uptime
@@ -26,3 +27,4 @@
       vars:
         uptime: "{{ uptime_output.stdout }}"
         logs: "{{ log_output.stdout }}"
+
