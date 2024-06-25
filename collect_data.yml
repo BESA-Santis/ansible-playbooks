@@ -18,7 +18,10 @@
         path: "/home/target2"
         state: directory
 
-    - name: Transfer and concatenate output from test servers
-      ansible.builtin.shell: "find /tmp -maxdepth 1 -name 'hostname_output_*.txt' -exec cat {} + > /home/target2/test_server_output.txt"
+    - name: Transfer output from each test server to individual files
+      ansible.builtin.copy:
+        src: "/tmp/hostname_output_{{ item }}.txt"
+        dest: "/home/target2/hostname_output_{{ item }}.txt"
+      with_items: "{{ groups['test'] }}"
       delegate_to: remote_server
       ignore_errors: true
