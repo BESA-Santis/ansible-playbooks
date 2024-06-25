@@ -1,25 +1,26 @@
 - hosts: test  # Die Gruppe "test" umfasst die beiden Server 192.168.209.89 und 192.168.209.95
   tasks:
-    - name: Get system information from servers in test group
-      ansible.builtin.shell: "hostnamectl"
-      register: hostname_output
-
-    - name: Save output to file on each server in test group
-      ansible.builtin.copy:
-        content: "{{ hostname_output.stdout }}"
-        dest: "/home/target1/ausgabedatei.txt"
-      delegate_to: "{{ inventory_hostname }}"
-
-- hosts: remote_servers  # Die Gruppe "remote_servers" umfasst den Server 192.168.209.94
-  tasks:
-    - name: Get system information from remote_server
+    - name: Get system information from test servers
       ansible.builtin.shell: "hostnamectl"
       register: hostname_output
 
     - name: Save output to file on remote_server
       ansible.builtin.copy:
         content: "{{ hostname_output.stdout }}"
-        dest: "/home/target2/ausgabedatei.txt"
+        dest: "/home/target2/test_server_output.txt"
       delegate_to: remote_server
+
+- hosts: remote_servers  # Die Gruppe "remote_servers" umfasst den Server 192.168.209.94
+  tasks:
+    - name: Ensure target2 directory exists
+      ansible.builtin.file:
+        path: "/home/target2"
+        state: directory
+
+    - name: Ensure target2/test_server_output.txt exists
+      ansible.builtin.file:
+        path: "/home/target2/test_server_output.txt"
+        state: touch
+        mode: '0644'
 
 
