@@ -1,18 +1,12 @@
-- hosts: localhost
+- hosts: test
   tasks:
     - name: Get system information
-      ansible.builtin.shell: "uname -a"
+      ansible.builtin.shell: "hostnamectl"
       register: hostname_output
 
-    - name: Send output via email
-      ansible.builtin.mail:
-        host: smtp.hispeed.ch
-        port: 587
-        username: s.berger@hispeed.ch
-        password: "{{ }}"
-        to: sascha.berger@santismail.ch
-        subject: Ansible Output
-        body: "{{ hostname_output.stdout }}"
-        from: s.berger@hispeed.ch
-        secure: starttls
-        
+    - name: Save output to file on remote server
+      ansible.builtin.copy:
+        content: "{{ hostname_output.stdout }}"
+        dest: "/home/target1/ausgabedatei.txt"
+      delegate_to: remote_server
+
