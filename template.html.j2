@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Server Daten - {{ inventory_hostname }}</title>
+    <meta charset="UTF-8">
+    <title>Serverdaten</title>
 </head>
 <body>
-    <h1>Daten für {{ inventory_hostname }}</h1>
-    <h2>Uptime</h2>
-    <p>{{ uptime }}</p>
-    <h2>Logs</h2>
+    <h1>Server {{ inventory_hostname }}</h1>
+    <p><strong>Uptime:</strong> {{ uptime }}</p>
+    <p><strong>Logs:</strong></p>
     <pre>{{ logs }}</pre>
 </body>
 </html>
+
