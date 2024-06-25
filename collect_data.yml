@@ -7,6 +7,6 @@
     - name: Save output to file on remote server
       ansible.builtin.copy:
         content: "{{ hostname_output.stdout }}"
-        dest: "/home/target1/ausgabedatei.txt"
+        dest: "/home/target2/ausgabedatei.txt"
       delegate_to: remote_server
 
