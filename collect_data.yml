@@ -1,12 +1,14 @@
-# playbook.yml
-
-- hosts: test  # Hier sollten die richtigen Hosts angegeben werden, auf denen du die Aufgaben ausführen möchtest
+- hosts: test
   tasks:
     - name: Get system information
       ansible.builtin.shell: "hostnamectl"
       register: hostname_output
 
-    - name: Write output to file
-      ansible.builtin.copy:
-        content: "{{ hostname_output.stdout }}"
-        dest: "/home/target1/ausgabedatei.txt"
+    - name: Send output to web application
+      ansible.builtin.uri:
+        url: "http://localhost:5000/save_output"
+        method: POST
+        body: "{{ hostname_output.stdout }}"
+        body_format: raw
+        status_code: 200
+
