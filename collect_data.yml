@@ -14,7 +14,7 @@
     - name: HTML-Verzeichnis erstellen, falls nicht vorhanden
       delegate_to: localhost
       file:
-        path: /home/html_data
+        path: /home/target1/testtt
         state: directory
         mode: '0755'
 
